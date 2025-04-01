@@ -1,4 +1,6 @@
 from django.shortcuts import render
+
+
 from rest_framework import status
 
 from rest_framework.decorators import api_view
@@ -21,6 +23,8 @@ def movie_api(request):
             serializer.save()
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
 # @api_view(["PUT","PATCH","DELETE"])
 # def movie_detail(request,slug):
 #
@@ -46,21 +50,15 @@ def movie_api(request):
 
 
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework import status
-from .models import Movie
-from .serializers import MovieSerializers
 
 @api_view(["GET", "PUT", "PATCH", "DELETE"])
 def movie_detail(request, slug):
-
     try:
-        movie=Movie.objects.get(slug=slug)
-        response={"success":True}
+        movie = Movie.objects.get(slug=slug)
+        response = {"success": True}
     except Exception as e:
-        response["error"]=e
-        return Response(data=response,status=status.HTTP_417_EXPECTATION_FAILED)
+        response["error"] = e
+        return Response(data=response, status=status.HTTP_417_EXPECTATION_FAILED)
     # GET so'rov
     if request.method == "GET":
         serializer = MovieSerializers(movie)
@@ -80,3 +78,8 @@ def movie_detail(request, slug):
         movie.delete()
         return Response({"success": True, "message": "Movie deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
 
+
+@api_view(['POST'])
+def ism_api(request):
+    ism = request.data['ism']
+    return Response(data={"ism": f"salom {ism}"})
